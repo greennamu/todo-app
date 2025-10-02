@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│ Permissions:  Allow   Ask   Deny   Workspace                                                                                                             │\n│                                                                                                                                                          │\n│ Claude Code can read files in the workspace, and make edits when auto-accept edits is on.                                                                │\n│                                                                                                                                                          │\n│   -  C:\\ANW\\programming\\To Do (Original working directory)                                                                                               │\n│ > 1. Add directory…                                                                                                                                      │\n│                                                                                                                                                          │\n╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n   Tab to select tab · Enter to confirm · Esc to cancel",
+      "FileSystem,WebFetch,Bash",
+      "FileSystem,Bash",
+      "FileSystem"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

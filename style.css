@@ -1,0 +1,515 @@
+/* CSS 변수 정의 - 다크/라이트 테마용 색상 */
+:root {
+    --bg-gradient-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --container-bg-light: rgba(255, 255, 255, 0.95);
+    --container-bg-dark: rgba(30, 30, 45, 0.95);
+    --text-primary-light: #2c3e50;
+    --text-primary-dark: #e2e8f0;
+    --text-secondary-light: #aab8c2;
+    --text-secondary-dark: #94a3b8;
+    --input-bg-light: #fff;
+    --input-bg-dark: #334155;
+    --input-border-light: #e1e8ed;
+    --input-border-dark: #475569;
+    --item-bg-light: #fff;
+    --item-bg-dark: #334155;
+    --item-border-light: #f0f3f4;
+    --item-border-dark: #475569;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+}
+
+/* 전체 요소 기본 스타일 리셋 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 바디 기본 스타일 - 라이트 테마 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient-light);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text-primary-light);
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 바디 스타일 */
+body.dark-mode {
+    background: var(--bg-gradient-dark);
+    color: var(--text-primary-dark);
+}
+
+/* 메인 컨테이너 스타일 */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--container-bg-light);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px var(--shadow-light);
+    padding: 40px 30px;
+    min-height: 400px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 컨테이너 스타일 */
+body.dark-mode .container {
+    background: var(--container-bg-dark);
+    box-shadow: 0 20px 40px var(--shadow-dark);
+}
+
+/* 헤더 영역 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+/* 제목 스타일 */
+h1 {
+    color: var(--text-primary-light);
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+}
+
+/* 다크 모드 제목 스타일 */
+body.dark-mode h1 {
+    color: var(--text-primary-dark);
+}
+
+/* 테마 토글 버튼 스타일 */
+.theme-toggle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* 테마 토글 버튼 호버 효과 */
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 다크 모드 테마 토글 버튼 스타일 */
+body.dark-mode .theme-toggle {
+    background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+}
+
+/* 다크 모드 테마 토글 버튼 호버 효과 */
+body.dark-mode .theme-toggle:hover {
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+}
+
+/* 입력 컨테이너 스타일 */
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+/* 통계 컨테이너 스타일 */
+.stats-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: var(--item-bg-light);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px var(--shadow-light);
+    border: 1px solid var(--item-border-light);
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 통계 컨테이너 */
+body.dark-mode .stats-container {
+    background: var(--item-bg-dark);
+    border-color: var(--item-border-dark);
+    box-shadow: 0 2px 10px var(--shadow-dark);
+}
+
+/* 통계 항목 스타일 */
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 60px;
+}
+
+/* 진행률 통계 항목 */
+.progress-stat {
+    flex: 1.5;
+}
+
+/* 통계 숫자 스타일 */
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+/* 통계 라벨 스타일 */
+.stat-label {
+    font-size: 12px;
+    color: var(--text-secondary-light);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+/* 다크 모드 통계 라벨 */
+body.dark-mode .stat-label {
+    color: var(--text-secondary-dark);
+}
+
+/* 진행률 바 컨테이너 */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--input-border-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    transition: background-color 0.3s ease;
+}
+
+/* 다크 모드 진행률 바 */
+body.dark-mode .progress-bar {
+    background: var(--input-border-dark);
+}
+
+/* 진행률 채움 */
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+/* 필터 컨테이너 스타일 */
+.filter-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 25px;
+    padding: 8px;
+    background: var(--container-bg-light);
+    border-radius: 12px;
+    border: 1px solid var(--item-border-light);
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 필터 컨테이너 */
+body.dark-mode .filter-container {
+    background: var(--container-bg-dark);
+    border-color: var(--item-border-dark);
+}
+
+/* 필터 버튼 스타일 */
+.filter-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    color: var(--text-secondary-light);
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 필터 버튼 */
+body.dark-mode .filter-btn {
+    color: var(--text-secondary-dark);
+}
+
+/* 필터 버튼 호버 효과 */
+.filter-btn:hover {
+    background: var(--input-bg-light);
+    color: var(--text-primary-light);
+}
+
+/* 다크 모드 필터 버튼 호버 */
+body.dark-mode .filter-btn:hover {
+    background: var(--input-bg-dark);
+    color: var(--text-primary-dark);
+}
+
+/* 활성 필터 버튼 */
+.filter-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* 활성 필터 버튼 호버 */
+.filter-btn.active:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* 작업 입력 필드 스타일 */
+#task-input {
+    flex: 1;
+    padding: 15px 20px;
+    border: 2px solid var(--input-border-light);
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: var(--input-bg-light);
+    color: var(--text-primary-light);
+}
+
+/* 다크 모드 입력 필드 스타일 */
+body.dark-mode #task-input {
+    border-color: var(--input-border-dark);
+    background: var(--input-bg-dark);
+    color: var(--text-primary-dark);
+}
+
+/* 입력 필드 포커스 스타일 */
+#task-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 입력 필드 플레이스홀더 스타일 */
+#task-input::placeholder {
+    color: var(--text-secondary-light);
+}
+
+/* 다크 모드 플레이스홀더 스타일 */
+body.dark-mode #task-input::placeholder {
+    color: var(--text-secondary-dark);
+}
+
+/* 작업 추가 버튼 스타일 */
+#add-task {
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* 추가 버튼 호버 효과 */
+#add-task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* 추가 버튼 활성화 효과 */
+#add-task:active {
+    transform: translateY(0);
+}
+
+/* 작업 목록 기본 스타일 */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* 작업 항목 스타일 */
+li {
+    margin: 15px 0;
+    padding: 20px;
+    background: var(--item-bg-light);
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px var(--shadow-light);
+    border: 1px solid var(--item-border-light);
+    transition: all 0.3s ease;
+}
+
+/* 완료된 작업 항목 스타일 */
+li.completed {
+    opacity: 0.8;
+    background: var(--item-bg-light);
+    border-color: var(--text-secondary-light);
+}
+
+/* 다크 모드 완료된 작업 항목 스타일 */
+body.dark-mode li.completed {
+    background: var(--item-bg-dark);
+    border-color: var(--text-secondary-dark);
+}
+
+/* 다크 모드 작업 항목 스타일 */
+body.dark-mode li {
+    background: var(--item-bg-dark);
+    border-color: var(--item-border-dark);
+    box-shadow: 0 2px 10px var(--shadow-dark);
+}
+
+/* 작업 항목 호버 효과 */
+li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--shadow-light);
+}
+
+/* 다크 모드 작업 항목 호버 효과 */
+body.dark-mode li:hover {
+    box-shadow: 0 8px 25px var(--shadow-dark);
+}
+
+/* 작업 내용 컨테이너 스타일 */
+.task-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+}
+
+/* 체크박스 스타일 */
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+    transform: scale(1.2);
+}
+
+/* 작업 텍스트 스타일 */
+li span {
+    font-size: 16px;
+    color: var(--text-primary-light);
+    flex: 1;
+    margin-right: 15px;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+/* 완료된 작업 텍스트 스타일 */
+li.completed span {
+    text-decoration: line-through;
+    text-decoration-color: #ff6b6b;
+    text-decoration-thickness: 2px;
+    color: #888;
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드 작업 텍스트 스타일 */
+body.dark-mode li span {
+    color: var(--text-primary-dark);
+}
+
+/* 다크 모드 완료된 작업 텍스트 스타일 */
+body.dark-mode li.completed span {
+    color: #999;
+    text-decoration-color: #ff6b6b;
+}
+
+/* 삭제 버튼 스타일 */
+.delete-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+/* 삭제 버튼 호버 효과 */
+.delete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* 삭제 버튼 활성화 효과 */
+.delete-btn:active {
+    transform: translateY(0);
+}
+
+/* 빈 상태 메시지 스타일 */
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary-light);
+    font-size: 16px;
+    margin-top: 40px;
+    padding: 40px 20px;
+    transition: color 0.3s ease;
+}
+
+/* 다크 모드 빈 상태 메시지 스타일 */
+body.dark-mode .empty-state {
+    color: var(--text-secondary-dark);
+}
+
+/* 반응형 디자인 - 600px 이하 화면 */
+@media (max-width: 600px) {
+    .container {
+        margin: 10px;
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .input-container {
+        flex-direction: column;
+    }
+
+    #add-task {
+        width: 100%;
+    }
+
+    /* 모바일에서 통계 컨테이너 조정 */
+    .stats-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .stat-item {
+        min-width: 80px;
+    }
+
+    .progress-stat {
+        flex: 100%;
+        margin-top: 10px;
+    }
+
+    /* 모바일에서 필터 버튼 크기 조정 */
+    .filter-btn {
+        font-size: 13px;
+        padding: 12px 8px;
+    }
+}
