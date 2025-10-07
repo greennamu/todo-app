@@ -18,6 +18,9 @@ let currentFilter = 'all';
 // 작업 목록을 로컬스토리지에 저장하기 위한 키
 const STORAGE_KEY = 'todoTasks';
 
+// 고유 ID 생성을 위한 카운터
+let taskIdCounter = 0;
+
 // 테마 기능 초기화
 function initTheme() {
     // 저장된 테마 설정 가져오기
@@ -48,7 +51,19 @@ function toggleTheme() {
 function loadTasks() {
     try {
         const savedTasks = localStorage.getItem(STORAGE_KEY);
-        return savedTasks ? JSON.parse(savedTasks) : [];
+        const tasks = savedTasks ? JSON.parse(savedTasks) : [];
+
+        // 레거시 호환성: 문자열 형태의 작업을 객체로 변환
+        return tasks.map((task, index) => {
+            if (typeof task === 'string') {
+                return { id: index + 1, text: task, completed: false };
+            }
+            // ID가 없는 경우 추가
+            if (!task.id) {
+                task.id = index + 1;
+            }
+            return task;
+        });
     } catch (error) {
         console.error('작업 목록 불러오기 실패:', error);
         return [];
@@ -64,14 +79,22 @@ function saveTasks(tasks) {
     }
 }
 
+// ID 카운터 초기화 함수
+function initTaskIdCounter() {
+    const tasks = loadTasks();
+    if (tasks.length > 0) {
+        // 기존 작업 중 가장 큰 ID를 찾아서 카운터 설정
+        taskIdCounter = Math.max(...tasks.map(task => task.id || 0));
+    } else {
+        taskIdCounter = 0;
+    }
+}
+
 // 통계 업데이트 함수
 function updateStats() {
     const tasks = loadTasks();
     const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(task => {
-        const taskData = typeof task === 'string' ? { completed: false } : task;
-        return taskData.completed;
-    }).length;
+    const completedTasks = tasks.filter(task => task.completed).length;
     const pendingTasks = totalTasks - completedTasks;
     const progressPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
@@ -90,13 +113,10 @@ function renderTasks() {
     const tasks = loadTasks();
     taskList.innerHTML = ''; // 기존 목록 초기화
 
-    tasks.forEach((task, index) => {
-        // 작업이 문자열인 경우 객체로 변환 (이전 버전 호환성)
-        const taskData = typeof task === 'string' ? { text: task, completed: false } : task;
-
+    tasks.forEach((task) => {
         // 현재 필터에 맞는 작업만 표시
-        if (shouldShowTask(taskData)) {
-            createTaskElement(taskData.text, index, taskData.completed);
+        if (shouldShowTask(task)) {
+            createTaskElement(task.text, task.id, task.completed);
         }
     });
 
@@ -105,12 +125,12 @@ function renderTasks() {
 }
 
 // 필터 조건에 맞는 작업인지 확인
-function shouldShowTask(taskData) {
+function shouldShowTask(task) {
     switch (currentFilter) {
         case 'completed':
-            return taskData.completed;
+            return task.completed;
         case 'pending':
-            return !taskData.completed;
+            return !task.completed;
         case 'all':
         default:
             return true;
@@ -118,8 +138,9 @@ function shouldShowTask(taskData) {
 }
 
 // 새로운 작업 요소 생성
-function createTaskElement(taskText, index, completed = false) {
+function createTaskElement(taskText, taskId, completed = false) {
     const li = document.createElement('li');
+    li.dataset.taskId = taskId; // 고유 ID를 data 속성으로 저장
 
     // 완료 상태에 따라 클래스 추가
     if (completed) {
@@ -147,12 +168,12 @@ function createTaskElement(taskText, index, completed = false) {
 
     // 체크박스 이벤트 리스너 추가
     li.querySelector('.task-checkbox').addEventListener('change', (e) => {
-        toggleTaskCompletion(index, li, e.target.checked);
+        toggleTaskCompletion(taskId, li, e.target.checked);
     });
 
     // 삭제 버튼 이벤트 리스너 추가
     li.querySelector('.delete-btn').addEventListener('click', () => {
-        deleteTask(index, li);
+        deleteTask(taskId, li);
     });
 }
 
@@ -163,14 +184,17 @@ function addTask() {
     if (taskText) {
         // 현재 저장된 작업 목록 가져오기
         const tasks = loadTasks();
+        // 고유 ID 생성
+        const newTaskId = ++taskIdCounter;
         // 새 작업 추가 (객체 형태로 저장)
-        tasks.push({ text: taskText, completed: false });
+        const newTask = { id: newTaskId, text: taskText, completed: false };
+        tasks.push(newTask);
         // 로컬스토리지에 저장
         saveTasks(tasks);
 
         // 화면에 새 작업 요소 추가 (현재 필터에 맞는 경우만)
-        if (shouldShowTask({ text: taskText, completed: false })) {
-            createTaskElement(taskText, tasks.length - 1, false);
+        if (shouldShowTask(newTask)) {
+            createTaskElement(taskText, newTaskId, false);
         }
 
         // 통계 업데이트
@@ -182,17 +206,14 @@ function addTask() {
 }
 
 // 작업 완료 상태 토글 기능
-function toggleTaskCompletion(index, element, isCompleted) {
+function toggleTaskCompletion(taskId, element, isCompleted) {
     // 현재 저장된 작업 목록 가져오기
     const tasks = loadTasks();
 
     // 해당 작업의 완료 상태 업데이트
-    if (tasks[index]) {
-        // 문자열인 경우 객체로 변환 (이전 버전 호환성)
-        if (typeof tasks[index] === 'string') {
-            tasks[index] = { text: tasks[index], completed: false };
-        }
-        tasks[index].completed = isCompleted;
+    const taskIndex = tasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+        tasks[taskIndex].completed = isCompleted;
 
         // 로컬스토리지에 저장
         saveTasks(tasks);
@@ -210,7 +231,7 @@ function toggleTaskCompletion(index, element, isCompleted) {
 }
 
 // 작업 삭제 기능
-function deleteTask(index, element) {
+function deleteTask(taskId, element) {
     // 페이드아웃 애니메이션 적용
     element.style.opacity = '0';
     element.style.transform = 'translateX(100%)';
@@ -223,11 +244,14 @@ function deleteTask(index, element) {
 
         // 로컬스토리지에서 해당 작업 제거
         const tasks = loadTasks();
-        tasks.splice(index, 1);
-        saveTasks(tasks);
+        const taskIndex = tasks.findIndex(task => task.id === taskId);
+        if (taskIndex !== -1) {
+            tasks.splice(taskIndex, 1);
+            saveTasks(tasks);
+        }
 
-        // 인덱스 변경으로 인한 전체 목록 다시 렌더링
-        renderTasks();
+        // 통계 업데이트
+        updateStats();
     }, 300);
 }
 
@@ -270,8 +294,6 @@ filterButtons.forEach(button => {
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', () => {
     initTheme(); // 테마 초기화
+    initTaskIdCounter(); // ID 카운터 초기화
     renderTasks(); // 저장된 작업 목록 렌더링
 });
-
-// 페이지 로드 완료 시 테마 초기화 (DOMContentLoaded 이벤트 백업)
-initTheme();
